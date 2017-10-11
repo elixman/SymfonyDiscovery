@@ -1,0 +1,7 @@
+sb_platform_homepage:
+    path:     /
+    defaults: { _controller: SBPlatformBundle:Default:index }
+
+hello_the_world:
+    path:     /hello-world
+    defaults: { _controller: SBPlatformBundle:Advert:index }

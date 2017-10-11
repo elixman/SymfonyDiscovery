@@ -1,0 +1,7 @@
+sb_platform:
+    resource: "@SBPlatformBundle/Resources/config/routing.yml"
+    prefix:   /
+
+app:
+    resource: '@AppBundle/Controller/'
+    type: annotation
