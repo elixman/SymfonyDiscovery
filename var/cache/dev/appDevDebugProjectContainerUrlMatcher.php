@@ -103,27 +103,32 @@ class appDevDebugProjectContainerUrlMatcher extends Symfony\Bundle\FrameworkBund
 
         }
 
-        // sb_platform_homepage
-        if ('' === $trimmedPathinfo) {
-            if (substr($pathinfo, -1) !== '/') {
-                return $this->redirect($pathinfo.'/', 'sb_platform_homepage');
+        elseif (0 === strpos($pathinfo, '/platform')) {
+            // sb_platform_home
+            if (preg_match('#^/platform(?:/(?P<page>\\d*))?$#s', $pathinfo, $matches)) {
+                return $this->mergeDefaults(array_replace($matches, array('_route' => 'sb_platform_home')), array (  '_controller' => 'SB\\PlatformBundle\\Controller\\AdvertController::indexAction',  'page' => 1,));
             }
 
-            return array (  '_controller' => 'SB\\PlatformBundle\\Controller\\DefaultController::indexAction',  '_route' => 'sb_platform_homepage',);
-        }
-
-        // hello_the_world
-        if ('/hello-world' === $pathinfo) {
-            return array (  '_controller' => 'SB\\PlatformBundle\\Controller\\AdvertController::indexAction',  '_route' => 'hello_the_world',);
-        }
-
-        // homepage
-        if ('' === $trimmedPathinfo) {
-            if (substr($pathinfo, -1) !== '/') {
-                return $this->redirect($pathinfo.'/', 'homepage');
+            // sb_platform_view
+            if (0 === strpos($pathinfo, '/platform/advert') && preg_match('#^/platform/advert/(?P<id>\\d+)$#s', $pathinfo, $matches)) {
+                return $this->mergeDefaults(array_replace($matches, array('_route' => 'sb_platform_view')), array (  '_controller' => 'SB\\PlatformBundle\\Controller\\AdvertController::viewAction',));
             }
 
-            return array (  '_controller' => 'AppBundle\\Controller\\DefaultController::indexAction',  '_route' => 'homepage',);
+            // sb_platform_add
+            if ('/platform/add' === $pathinfo) {
+                return array (  '_controller' => 'SB\\PlatformBundle\\Controller\\AdvertController::addAction',  '_route' => 'sb_platform_add',);
+            }
+
+            // sb_platform_edit
+            if (0 === strpos($pathinfo, '/platform/edit') && preg_match('#^/platform/edit/(?P<id>\\d+)$#s', $pathinfo, $matches)) {
+                return $this->mergeDefaults(array_replace($matches, array('_route' => 'sb_platform_edit')), array (  '_controller' => 'SB\\PlatformBundle\\Controller\\AdvertController::editAction',));
+            }
+
+            // sb_platform_delete
+            if (0 === strpos($pathinfo, '/platform/delete') && preg_match('#^/platform/delete/(?P<id>\\d+)$#s', $pathinfo, $matches)) {
+                return $this->mergeDefaults(array_replace($matches, array('_route' => 'sb_platform_delete')), array (  '_controller' => 'SB\\PlatformBundle\\Controller\\AdvertController::deleteAction',));
+            }
+
         }
 
         throw 0 < count($allow) ? new MethodNotAllowedException(array_unique($allow)) : new ResourceNotFoundException();
